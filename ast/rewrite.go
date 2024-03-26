@@ -20,12 +20,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/pingcap/parser/ast"
 	"reflect"
 	"regexp"
 	"strings"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/pingcap/parser/ast"
+
+	"github.com/BruceDu521/soar/common"
 
 	"github.com/kr/pretty"
 	"vitess.io/vitess/go/vt/sqlparser"
@@ -620,7 +621,6 @@ func (rw *Rewrite) RewriteInnoDB() *Rewrite {
 		} else {
 			create.TableSpec.Options = " ENGINE=InnoDB " + create.TableSpec.Options
 		}
-
 	}
 
 	rw.NewSQL = sqlparser.String(rw.Stmt)
@@ -757,7 +757,6 @@ func (rw *Rewrite) RewriteStar2Columns() *Rewrite {
 
 // RewriteInsertColumns insertcolumns: 对应COL.002，INSERT补全列名
 func (rw *Rewrite) RewriteInsertColumns() *Rewrite {
-
 	switch insert := rw.Stmt.(type) {
 	case *sqlparser.Insert:
 		switch insert.Action {
@@ -1519,7 +1518,6 @@ func (rw *Rewrite) sub2Join(parent, sub string) (string, error) {
 							// TODO:
 						}
 					}
-
 				}
 			}
 		}
@@ -1532,7 +1530,6 @@ func (rw *Rewrite) sub2Join(parent, sub string) (string, error) {
 
 // columnFromWhere 获取列是来自哪个表，并补充前缀
 func columnFromWhere(col *sqlparser.ColName, meta common.Meta, columns common.TableColumns) *sqlparser.ColName {
-
 	for dbName, db := range meta {
 		for tbName := range db.Table {
 			for _, tables := range columns {
@@ -1554,7 +1551,6 @@ func columnFromWhere(col *sqlparser.ColName, meta common.Meta, columns common.Ta
 					}
 				}
 			}
-
 		}
 	}
 	return col
@@ -1627,7 +1623,7 @@ func (rw *Rewrite) RewriteDML2Select() *Rewrite {
 }
 
 func (rw *Rewrite) RewriteReg2Select() *Rewrite {
-	var pre = 9
+	pre := 9
 	if len(rw.SQL) < pre {
 		// SQL to short no need convert
 		return rw

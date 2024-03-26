@@ -24,13 +24,15 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 
 	"github.com/kr/pretty"
 )
 
-var connTest *Connector
-var update = flag.Bool("update", false, "update .golden files")
+var (
+	connTest *Connector
+	update   = flag.Bool("update", false, "update .golden files")
+)
 
 func TestMain(m *testing.M) {
 	// 初始化 init

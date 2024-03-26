@@ -21,9 +21,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 
-	"github.com/XiaoMi/soar/env"
+	"github.com/BruceDu521/soar/env"
 	"github.com/kr/pretty"
 	"vitess.io/vitess/go/vt/sqlparser"
 )
@@ -202,7 +202,8 @@ func TestTimeFormatError(t *testing.T) {
 func TestRuleNoWhere(t *testing.T) {
 	common.Log.Debug("Entering function: %s", common.GetFunctionName())
 	sqls := [][]string{
-		{"select col from tbl",
+		{
+			"select col from tbl",
 			"delete from tbl",
 			"update tbl set col=1",
 			"insert into city (country_id) select country_id from country",
@@ -899,7 +900,7 @@ func TestRuleUpdateSetAnd(t *testing.T) {
 		},
 		{
 			"update tbl set col = 1 ,cl = 2 where col=3;",
-			// https://github.com/XiaoMi/soar/issues/226
+			// https://github.com/BruceDu521/soar/issues/226
 			"update table1 set a = ( select a from table2 where b=1 and c=2), b=1, c=2 where d=2",
 		},
 	}
@@ -1066,7 +1067,7 @@ func TestRuleMultiCompare(t *testing.T) {
 		},
 		{
 			"SELECT * FROM tbl WHERE col = 'abc'",
-			// https://github.com/XiaoMi/soar/issues/169
+			// https://github.com/BruceDu521/soar/issues/169
 			"SELECT * FROM tbl WHERE col = 'abc' and c = 1",
 			"update tb set c = 1 where a = 2 and b = 3",
 			"delete from tb where a = 2 and b = 3",
@@ -1690,6 +1691,7 @@ func TestRuleStringConcatenation(t *testing.T) {
 	}
 	common.Log.Debug("Exiting function: %s", common.GetFunctionName())
 }
+
 // FUN.004
 func TestRuleSysdate(t *testing.T) {
 	common.Log.Debug("Entering function: %s", common.GetFunctionName())

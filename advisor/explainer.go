@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/XiaoMi/soar/common"
-	"github.com/XiaoMi/soar/database"
+	"github.com/BruceDu521/soar/common"
+	"github.com/BruceDu521/soar/database"
 )
 
 var explainRuleID int

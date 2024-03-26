@@ -24,9 +24,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/XiaoMi/soar/ast"
-	"github.com/XiaoMi/soar/common"
-	"github.com/XiaoMi/soar/database"
+	"github.com/BruceDu521/soar/ast"
+	"github.com/BruceDu521/soar/common"
+	"github.com/BruceDu521/soar/database"
 
 	"github.com/gedex/inflector"
 	"github.com/percona/go-mysql/query"
@@ -44,7 +44,7 @@ func (q *Query4Audit) RuleOK() Rule {
 
 // RuleImplicitAlias ALI.001
 func (q *Query4Audit) RuleImplicitAlias() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	tkns := ast.Tokenizer(q.Query)
 	if len(tkns) == 0 {
 		return rule
@@ -63,7 +63,7 @@ func (q *Query4Audit) RuleImplicitAlias() Rule {
 
 // RuleStarAlias ALI.002
 func (q *Query4Audit) RuleStarAlias() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	tkns := ast.Tokenizer(q.Query)
 	for i, tkn := range tkns {
 		if strings.HasSuffix(tkn.Val, "*") && i+1 < len(tkns) && strings.ToLower(tkns[i+1].Val) == "as" {
@@ -75,7 +75,7 @@ func (q *Query4Audit) RuleStarAlias() Rule {
 
 // RuleSameAlias ALI.003
 func (q *Query4Audit) RuleSameAlias() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch expr := node.(type) {
 		case *sqlparser.AliasedExpr:
@@ -103,7 +103,7 @@ func (q *Query4Audit) RuleSameAlias() Rule {
 
 // RulePrefixLike ARG.001
 func (q *Query4Audit) RulePrefixLike() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch expr := node.(type) {
 		case *sqlparser.ComparisonExpr:
@@ -126,7 +126,7 @@ func (q *Query4Audit) RulePrefixLike() Rule {
 
 // RuleEqualLike ARG.002
 func (q *Query4Audit) RuleEqualLike() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch expr := node.(type) {
 		case *sqlparser.ComparisonExpr:
@@ -383,7 +383,7 @@ func timeFormatCheck(t string) bool {
 
 // RuleNoWhere CLA.001 & CLA.014 & CLA.015
 func (q *Query4Audit) RuleNoWhere() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.Select:
@@ -416,7 +416,7 @@ func (q *Query4Audit) RuleNoWhere() Rule {
 
 // RuleOrderByRand CLA.002
 func (q *Query4Audit) RuleOrderByRand() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case sqlparser.OrderBy:
@@ -438,7 +438,7 @@ func (q *Query4Audit) RuleOrderByRand() Rule {
 
 // RuleOffsetLimit CLA.003
 func (q *Query4Audit) RuleOffsetLimit() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.Limit:
@@ -462,7 +462,7 @@ func (q *Query4Audit) RuleOffsetLimit() Rule {
 
 // RuleGroupByConst CLA.004
 func (q *Query4Audit) RuleGroupByConst() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case sqlparser.GroupBy:
@@ -504,7 +504,7 @@ func (idxAdv *IndexAdvisor) RuleGroupByConst() Rule {
 
 // RuleOrderByConst CLA.005
 func (q *Query4Audit) RuleOrderByConst() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case sqlparser.OrderBy:
@@ -547,7 +547,7 @@ func (idxAdv *IndexAdvisor) RuleOrderByConst() Rule {
 
 // RuleDiffGroupByOrderBy CLA.006
 func (q *Query4Audit) RuleDiffGroupByOrderBy() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var groupbyTbls []sqlparser.TableIdent
 	var orderbyTbls []sqlparser.TableIdent
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
@@ -618,7 +618,7 @@ func (q *Query4Audit) RuleDiffGroupByOrderBy() Rule {
 
 // RuleExplicitOrderBy CLA.008
 func (q *Query4Audit) RuleExplicitOrderBy() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.Select:
@@ -636,7 +636,7 @@ func (q *Query4Audit) RuleExplicitOrderBy() Rule {
 
 // RuleOrderByExpr CLA.009
 func (q *Query4Audit) RuleOrderByExpr() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var orderByCols []string
 	var selectCols []string
 	funcExp := regexp.MustCompile(`(?i)[a-z0-9]\(`)
@@ -699,7 +699,7 @@ func (q *Query4Audit) RuleOrderByExpr() Rule {
 
 // RuleGroupByExpr CLA.010
 func (q *Query4Audit) RuleGroupByExpr() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var groupByCols []string
 	var selectCols []string
 	funcExp := regexp.MustCompile(`(?i)[a-z0-9]\(`)
@@ -762,7 +762,7 @@ func (q *Query4Audit) RuleGroupByExpr() Rule {
 
 // RuleTblCommentCheck CLA.011
 func (q *Query4Audit) RuleTblCommentCheck() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch node := q.Stmt.(type) {
 	case *sqlparser.DDL:
 		if strings.ToLower(node.Action) != "create" {
@@ -773,7 +773,6 @@ func (q *Query4Audit) RuleTblCommentCheck() Rule {
 		}
 		if options := node.TableSpec.Options; options == "" {
 			rule = HeuristicRules["CLA.011"]
-
 		} else {
 			reg := regexp.MustCompile("(?i)comment")
 			if !reg.MatchString(options) {
@@ -786,7 +785,7 @@ func (q *Query4Audit) RuleTblCommentCheck() Rule {
 
 // RuleSelectStar COL.001
 func (q *Query4Audit) RuleSelectStar() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	// 先把count(*)替换为count(1)
 	re := regexp.MustCompile(`(?i)count\s*\(\s*\*\s*\)`)
 	sql := re.ReplaceAllString(q.Query, "count(1)")
@@ -809,7 +808,7 @@ func (q *Query4Audit) RuleSelectStar() Rule {
 
 // RuleInsertColDef COL.002
 func (q *Query4Audit) RuleInsertColDef() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch node := q.Stmt.(type) {
 	case *sqlparser.Insert:
 		if node.Columns == nil {
@@ -822,7 +821,7 @@ func (q *Query4Audit) RuleInsertColDef() Rule {
 
 // RuleAddDefaultValue COL.004
 func (q *Query4Audit) RuleAddDefaultValue() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, node := range q.TiStmt {
 		switch n := node.(type) {
 		case *tidb.CreateTableStmt:
@@ -877,7 +876,7 @@ func (q *Query4Audit) RuleAddDefaultValue() Rule {
 
 // RuleColCommentCheck COL.005
 func (q *Query4Audit) RuleColCommentCheck() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, node := range q.TiStmt {
 		switch n := node.(type) {
 		case *tidb.CreateTableStmt:
@@ -918,7 +917,7 @@ func (q *Query4Audit) RuleColCommentCheck() Rule {
 
 // RuleIPString LIT.001
 func (q *Query4Audit) RuleIPString() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	for _, stmt := range q.TiStmt {
 		switch stmt.(type) {
@@ -940,7 +939,7 @@ func (q *Query4Audit) RuleIPString() Rule {
 
 // RuleDateNotQuote LIT.002
 func (q *Query4Audit) RuleDateNotQuote() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// by pass insert except, insert select
 	switch n := q.Stmt.(type) {
@@ -987,7 +986,7 @@ func (q *Query4Audit) RuleDateNotQuote() Rule {
 
 // RuleSQLCalcFoundRows KWR.001
 func (q *Query4Audit) RuleSQLCalcFoundRows() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	tkns := ast.Tokenizer(q.Query)
 	for _, tkn := range tkns {
 		if strings.ToLower(tkn.Val) == "sql_calc_found_rows" {
@@ -1000,7 +999,7 @@ func (q *Query4Audit) RuleSQLCalcFoundRows() Rule {
 
 // RuleCommaAnsiJoin JOI.001
 func (q *Query4Audit) RuleCommaAnsiJoin() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.Select:
@@ -1027,7 +1026,7 @@ func (q *Query4Audit) RuleCommaAnsiJoin() Rule {
 
 // RuleDupJoin JOI.002
 func (q *Query4Audit) RuleDupJoin() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var tables []string
 	switch q.Stmt.(type) {
 	// TODO: 这里未检查UNION SELECT
@@ -1108,7 +1107,7 @@ func (idxAdv *IndexAdvisor) RuleImpossibleOuterJoin() Rule {
 
 // RuleNoDeterministicGroupby RES.001
 func (q *Query4Audit) RuleNoDeterministicGroupby() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var groupbyCols []*common.Column
 	var selectCols []*common.Column
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
@@ -1150,7 +1149,7 @@ func (q *Query4Audit) RuleNoDeterministicGroupby() Rule {
 
 // RuleNoDeterministicLimit RES.002
 func (q *Query4Audit) RuleNoDeterministicLimit() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.Select:
@@ -1167,7 +1166,7 @@ func (q *Query4Audit) RuleNoDeterministicLimit() Rule {
 
 // RuleUpdateDeleteWithLimit RES.003
 func (q *Query4Audit) RuleUpdateDeleteWithLimit() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.Update:
 		if s.Limit != nil {
@@ -1179,7 +1178,7 @@ func (q *Query4Audit) RuleUpdateDeleteWithLimit() Rule {
 
 // RuleUpdateDeleteWithOrderby RES.004
 func (q *Query4Audit) RuleUpdateDeleteWithOrderby() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.Update:
 		if s.OrderBy != nil {
@@ -1191,7 +1190,7 @@ func (q *Query4Audit) RuleUpdateDeleteWithOrderby() Rule {
 
 // RuleUpdateSetAnd RES.005
 func (q *Query4Audit) RuleUpdateSetAnd() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.Update:
 		for _, c := range s.Exprs {
@@ -1209,7 +1208,7 @@ func (q *Query4Audit) RuleUpdateSetAnd() Rule {
 
 // RuleImpossibleWhere RES.006
 func (q *Query4Audit) RuleImpossibleWhere() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	// BETWEEN 10 AND 5
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
@@ -1274,7 +1273,7 @@ func (q *Query4Audit) RuleImpossibleWhere() Rule {
 
 // RuleMeaninglessWhere RES.007
 func (q *Query4Audit) RuleMeaninglessWhere() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	var where *sqlparser.Where
 	switch n := q.Stmt.(type) {
@@ -1384,7 +1383,7 @@ func (q *Query4Audit) RuleMeaninglessWhere() Rule {
 
 // RuleLoadFile RES.008
 func (q *Query4Audit) RuleLoadFile() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	// 去除注释
 	sql := database.RemoveSQLComments(q.Query)
 	// 去除多余的空格和回车
@@ -1411,7 +1410,7 @@ func (q *Query4Audit) RuleLoadFile() Rule {
 
 // RuleMultiCompare RES.009
 func (q *Query4Audit) RuleMultiCompare() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	if q.TiStmt != nil {
 		json := ast.StmtNode2JSON(q.Query, "", "")
 		whereJSON := common.JSONFind(json, "Where")
@@ -1432,7 +1431,7 @@ func (q *Query4Audit) RuleMultiCompare() Rule {
 
 // RuleCreateOnUpdate RES.010
 func (q *Query4Audit) RuleCreateOnUpdate() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -1509,7 +1508,7 @@ func (idxAdv *IndexAdvisor) RuleUpdateOnUpdate() Rule {
 
 // RuleStandardINEQ STA.001
 func (q *Query4Audit) RuleStandardINEQ() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	re := regexp.MustCompile(`(!=)`)
 	if re.FindString(q.Query) != "" {
 		rule = HeuristicRules["STA.001"]
@@ -1522,7 +1521,7 @@ func (q *Query4Audit) RuleStandardINEQ() Rule {
 
 // RuleUseKeyWord KWR.002
 func (q *Query4Audit) RuleUseKeyWord() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		if q.TiStmt == nil {
@@ -1554,7 +1553,6 @@ func (q *Query4Audit) RuleUseKeyWord() Rule {
 					}
 				}
 			}
-
 		}
 	}
 
@@ -1564,7 +1562,7 @@ func (q *Query4Audit) RuleUseKeyWord() Rule {
 // RulePluralWord KWR.003
 // Reference: https://en.wikipedia.org/wiki/English_plurals
 func (q *Query4Audit) RulePluralWord() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		if q.TiStmt == nil {
@@ -1596,9 +1594,7 @@ func (q *Query4Audit) RulePluralWord() Rule {
 					}
 				}
 			}
-
 		}
-
 	}
 	return rule
 }
@@ -1606,7 +1602,7 @@ func (q *Query4Audit) RulePluralWord() Rule {
 // RuleMultiBytesWord KWR.004
 func (q *Query4Audit) RuleMultiBytesWord() Rule {
 	// TODO: 目前使用 utf8 字符集检查，其他字符集输入可能会有问题
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, tk := range ast.Tokenize(q.Query) {
 		switch tk.Type {
 		case ast.TokenTypeBacktickQuote, ast.TokenTypeWord:
@@ -1621,7 +1617,7 @@ func (q *Query4Audit) RuleMultiBytesWord() Rule {
 
 // RuleInvisibleUnicode KWR.005
 func (q *Query4Audit) RuleInvisibleUnicode() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, tk := range ast.Tokenizer(q.Query) {
 		// 多字节的肉眼不可见字符经过 Tokenizer 后被切成了单字节字符。
 		// strings.Contains 中的内容也肉眼不可见，需要使用 cat -A 查看代码
@@ -1644,7 +1640,7 @@ func (q *Query4Audit) RuleInvisibleUnicode() Rule {
 
 // RuleInsertSelect LCK.001
 func (q *Query4Audit) RuleInsertSelect() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch n := q.Stmt.(type) {
 	case *sqlparser.Insert:
 		switch n.Rows.(type) {
@@ -1657,7 +1653,7 @@ func (q *Query4Audit) RuleInsertSelect() Rule {
 
 // RuleInsertOnDup LCK.002
 func (q *Query4Audit) RuleInsertOnDup() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch n := q.Stmt.(type) {
 	case *sqlparser.Insert:
 		if n.OnDup != nil {
@@ -1670,7 +1666,7 @@ func (q *Query4Audit) RuleInsertOnDup() Rule {
 
 // RuleInSubquery SUB.001
 func (q *Query4Audit) RuleInSubquery() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch node.(type) {
 		case *sqlparser.Subquery:
@@ -1685,7 +1681,7 @@ func (q *Query4Audit) RuleInSubquery() Rule {
 
 // RuleSubqueryDepth SUB.004
 func (q *Query4Audit) RuleSubqueryDepth() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	if depth := ast.GetSubqueryDepth(q.Stmt); depth > common.Config.MaxSubqueryDepth {
 		rule = HeuristicRules["SUB.004"]
 	}
@@ -1695,7 +1691,7 @@ func (q *Query4Audit) RuleSubqueryDepth() Rule {
 // RuleSubQueryLimit SUB.005
 // 只有 IN 的 SUBQUERY 限制了 LIMIT, FROM 子句中的 SUBQUERY 并未限制 LIMIT
 func (q *Query4Audit) RuleSubQueryLimit() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.ComparisonExpr:
@@ -1720,7 +1716,7 @@ func (q *Query4Audit) RuleSubQueryLimit() Rule {
 
 // RuleSubQueryFunctions SUB.006
 func (q *Query4Audit) RuleSubQueryFunctions() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch node.(type) {
 		case *sqlparser.Subquery:
@@ -1746,7 +1742,7 @@ func (q *Query4Audit) RuleSubQueryFunctions() Rule {
 
 // RuleUNIONLimit SUB.007
 func (q *Query4Audit) RuleUNIONLimit() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, tiStmtNode := range q.TiStmt {
 		switch stmt := tiStmtNode.(type) {
 		// SetOprStmt represents "union/except/intersect statement"
@@ -1777,7 +1773,7 @@ func (q *Query4Audit) RuleUNIONLimit() Rule {
 
 // RuleMultiValueAttribute LIT.003
 func (q *Query4Audit) RuleMultiValueAttribute() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	re := regexp.MustCompile(`(?i)(id\s+regexp)`)
 	if re.FindString(q.Query) != "" {
 		rule = HeuristicRules["LIT.003"]
@@ -1790,7 +1786,7 @@ func (q *Query4Audit) RuleMultiValueAttribute() Rule {
 
 // RuleAddDelimiter LIT.004
 func (q *Query4Audit) RuleAddDelimiter() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	re := regexp.MustCompile(`(?i)(^use\s+[0-9a-z_-]*)|(^show\s+databases)`)
 	if re.FindString(q.Query) != "" && !strings.HasSuffix(q.Query, common.Config.Delimiter) {
 		rule = HeuristicRules["LIT.004"]
@@ -1803,7 +1799,7 @@ func (q *Query4Audit) RuleAddDelimiter() Rule {
 
 // RuleRecursiveDependency KEY.003
 func (q *Query4Audit) RuleRecursiveDependency() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -1839,7 +1835,7 @@ func (q *Query4Audit) RuleRecursiveDependency() Rule {
 
 // RuleImpreciseDataType COL.009
 func (q *Query4Audit) RuleImpreciseDataType() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	if q.TiStmt != nil {
 		for _, tiStmt := range q.TiStmt {
 			switch node := tiStmt.(type) {
@@ -1901,7 +1897,7 @@ func (q *Query4Audit) RuleImpreciseDataType() Rule {
 
 // RuleValuesInDefinition COL.010
 func (q *Query4Audit) RuleValuesInDefinition() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -1939,7 +1935,7 @@ func (q *Query4Audit) RuleValuesInDefinition() Rule {
 
 // RuleIndexAttributeOrder KEY.004
 func (q *Query4Audit) RuleIndexAttributeOrder() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -1972,7 +1968,7 @@ func (q *Query4Audit) RuleIndexAttributeOrder() Rule {
 
 // RuleNullUsage COL.011
 func (q *Query4Audit) RuleNullUsage() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	re := regexp.MustCompile(`(?i)(\s+null\s+)`)
 	if re.FindString(q.Query) != "" {
 		rule = HeuristicRules["COL.011"]
@@ -1985,7 +1981,7 @@ func (q *Query4Audit) RuleNullUsage() Rule {
 
 // RuleStringConcatenation FUN.003
 func (q *Query4Audit) RuleStringConcatenation() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	// 匹配 or 关键字
 	matchF := func(s string) bool {
 		// 状态：进入下一状态要匹配的字符
@@ -2031,7 +2027,6 @@ func (q *Query4Audit) RuleStringConcatenation() Rule {
 					return false, nil
 				}
 			}
-
 		}
 		return true, nil
 	}, q.Stmt)
@@ -2042,7 +2037,7 @@ func (q *Query4Audit) RuleStringConcatenation() Rule {
 
 // RuleSysdate FUN.004
 func (q *Query4Audit) RuleSysdate() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.FuncExpr:
@@ -2059,7 +2054,7 @@ func (q *Query4Audit) RuleSysdate() Rule {
 
 // RuleCountConst FUN.005
 func (q *Query4Audit) RuleCountConst() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	fingerprint := query.Fingerprint(q.Query)
 	countReg := regexp.MustCompile(`(?i)count\(\s*[0-9a-z?]*\s*\)`)
 	if countReg.MatchString(fingerprint) {
@@ -2073,9 +2068,9 @@ func (q *Query4Audit) RuleCountConst() Rule {
 
 // RuleSumNPE FUN.006
 func (q *Query4Audit) RuleSumNPE() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	fingerprint := query.Fingerprint(q.Query)
-	// TODO: https://github.com/XiaoMi/soar/issues/143
+	// TODO: https://github.com/BruceDu521/soar/issues/143
 	// https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
 	sumReg := regexp.MustCompile(`(?i)sum\(\s*[0-9a-z?]*\s*\)`)
 	isnullReg := regexp.MustCompile(`(?i)isnull\(sum\(\s*[0-9a-z?]*\s*\)\)`)
@@ -2091,7 +2086,7 @@ func (q *Query4Audit) RuleSumNPE() Rule {
 
 // RuleForbiddenTrigger FUN.007
 func (q *Query4Audit) RuleForbiddenTrigger() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// 由于vitess对某些语法的支持不完善，使得如创建临时表等语句无法通过语法检查
 	// 所以这里使用正则对触发器、临时表、存储过程等进行匹配
@@ -2116,7 +2111,7 @@ func (q *Query4Audit) RuleForbiddenTrigger() Rule {
 
 // RuleForbiddenProcedure FUN.008
 func (q *Query4Audit) RuleForbiddenProcedure() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// 由于vitess对某些语法的支持不完善，使得如创建临时表等语句无法通过语法检查
 	// 所以这里使用正则对触发器、临时表、存储过程等进行匹配
@@ -2141,7 +2136,7 @@ func (q *Query4Audit) RuleForbiddenProcedure() Rule {
 
 // RuleForbiddenFunction FUN.009
 func (q *Query4Audit) RuleForbiddenFunction() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// 由于vitess对某些语法的支持不完善，使得如创建临时表等语句无法通过语法检查
 	// 所以这里使用正则对触发器、临时表、存储过程等进行匹配
@@ -2166,7 +2161,7 @@ func (q *Query4Audit) RuleForbiddenFunction() Rule {
 
 // RulePatternMatchingUsage ARG.007
 func (q *Query4Audit) RulePatternMatchingUsage() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.Select:
 		re := regexp.MustCompile(`(?i)(\bregexp\b)|(\bsimilar to\b)`)
@@ -2179,7 +2174,7 @@ func (q *Query4Audit) RulePatternMatchingUsage() Rule {
 
 // RuleSpaghettiQueryAlert CLA.012
 func (q *Query4Audit) RuleSpaghettiQueryAlert() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	if len(query.Fingerprint(q.Query)) > common.Config.SpaghettiQueryLength {
 		rule = HeuristicRules["CLA.012"]
 	}
@@ -2188,7 +2183,7 @@ func (q *Query4Audit) RuleSpaghettiQueryAlert() Rule {
 
 // RuleReduceNumberOfJoin JOI.005
 func (q *Query4Audit) RuleReduceNumberOfJoin() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var tables []string
 	switch q.Stmt.(type) {
 	// TODO: UNION有可能有多张表，这里未检查UNION SELECT
@@ -2225,7 +2220,7 @@ func (q *Query4Audit) RuleReduceNumberOfJoin() Rule {
 // RuleDistinctUsage DIS.001
 func (q *Query4Audit) RuleDistinctUsage() Rule {
 	// Distinct
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.Select:
 		re := regexp.MustCompile(`(?i)(\bdistinct\b)`)
@@ -2238,7 +2233,7 @@ func (q *Query4Audit) RuleDistinctUsage() Rule {
 
 // RuleCountDistinctMultiCol DIS.002
 func (q *Query4Audit) RuleCountDistinctMultiCol() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.FuncExpr:
@@ -2256,7 +2251,7 @@ func (q *Query4Audit) RuleCountDistinctMultiCol() Rule {
 
 // RuleDistinctStar DIS.003
 func (q *Query4Audit) RuleDistinctStar() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.Select:
 		meta := ast.GetMeta(q.Stmt, nil)
@@ -2276,7 +2271,7 @@ func (q *Query4Audit) RuleDistinctStar() Rule {
 
 // RuleHavingClause CLA.013
 func (q *Query4Audit) RuleHavingClause() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch expr := node.(type) {
 		case *sqlparser.Select:
@@ -2330,7 +2325,7 @@ func (idxAdv *IndexAdvisor) RuleUpdatePrimaryKey() Rule {
 
 // RuleNestedSubQueries JOI.006
 func (q *Query4Audit) RuleNestedSubQueries() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch node.(type) {
 		case *sqlparser.Subquery:
@@ -2345,7 +2340,7 @@ func (q *Query4Audit) RuleNestedSubQueries() Rule {
 
 // RuleMultiDeleteUpdate JOI.007
 func (q *Query4Audit) RuleMultiDeleteUpdate() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.Delete, *sqlparser.Update:
 		err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
@@ -2363,7 +2358,7 @@ func (q *Query4Audit) RuleMultiDeleteUpdate() Rule {
 
 // RuleMultiDBJoin JOI.008
 func (q *Query4Audit) RuleMultiDBJoin() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	meta := ast.GetMeta(q.Stmt, nil)
 	dbCount := 0
 	for range meta {
@@ -2386,7 +2381,7 @@ func (q *Query4Audit) RuleMultiDBJoin() Rule {
 
 // RuleORUsage ARG.008
 func (q *Query4Audit) RuleORUsage() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.Select:
 		err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
@@ -2420,7 +2415,7 @@ func (q *Query4Audit) RuleORUsage() Rule {
 
 // RuleSpaceWithQuote ARG.009
 func (q *Query4Audit) RuleSpaceWithQuote() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, tk := range ast.Tokenize(q.Query) {
 		if tk.Type == ast.TokenTypeQuote {
 			if len(tk.Val) >= 2 {
@@ -2442,7 +2437,7 @@ func (q *Query4Audit) RuleSpaceWithQuote() Rule {
 // RuleHint ARG.010
 // TODO: sql_no_cache, straight join
 func (q *Query4Audit) RuleHint() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.IndexHints:
@@ -2459,7 +2454,7 @@ func (q *Query4Audit) RuleHint() Rule {
 
 // RuleNot ARG.011
 func (q *Query4Audit) RuleNot() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.ComparisonExpr:
@@ -2476,7 +2471,7 @@ func (q *Query4Audit) RuleNot() Rule {
 
 // RuleInsertValues ARG.012
 func (q *Query4Audit) RuleInsertValues() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.Insert:
 		switch val := s.Rows.(type) {
@@ -2491,7 +2486,7 @@ func (q *Query4Audit) RuleInsertValues() Rule {
 
 // RuleFullWidthQuote ARG.013
 func (q *Query4Audit) RuleFullWidthQuote() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, node := range q.TiStmt {
 		switch n := node.(type) {
 		case *tidb.CreateTableStmt, *tidb.AlterTableStmt:
@@ -2509,7 +2504,7 @@ func (q *Query4Audit) RuleFullWidthQuote() Rule {
 
 // RuleUNIONUsage SUB.002
 func (q *Query4Audit) RuleUNIONUsage() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.Union:
 		if strings.ToLower(s.Type) == "union" {
@@ -2521,7 +2516,7 @@ func (q *Query4Audit) RuleUNIONUsage() Rule {
 
 // RuleDistinctJoinUsage SUB.003
 func (q *Query4Audit) RuleDistinctJoinUsage() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch expr := q.Stmt.(type) {
 	case *sqlparser.Select:
 		if expr.Distinct != "" {
@@ -2537,7 +2532,7 @@ func (q *Query4Audit) RuleDistinctJoinUsage() Rule {
 
 // RuleReadablePasswords SEC.002
 func (q *Query4Audit) RuleReadablePasswords() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		re := regexp.MustCompile(`(?i)(password)|(password)|(pwd)`)
@@ -2585,7 +2580,7 @@ func (q *Query4Audit) RuleReadablePasswords() Rule {
 
 // RuleDataDrop SEC.003
 func (q *Query4Audit) RuleDataDrop() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.DBDDL:
 		if strings.ToLower(s.Action) == "drop" {
@@ -2603,7 +2598,7 @@ func (q *Query4Audit) RuleDataDrop() Rule {
 
 // RuleInjection SEC.004
 func (q *Query4Audit) RuleInjection() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	if q.TiStmt != nil {
 		json := ast.StmtNode2JSON(q.Query, "", "")
 		fs := common.JSONFind(json, "FnName")
@@ -2621,7 +2616,7 @@ func (q *Query4Audit) RuleInjection() Rule {
 
 // RuleCompareWithFunction FUN.001
 func (q *Query4Audit) RuleCompareWithFunction() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// `select id from t where num/2 = 100`,
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
@@ -2659,7 +2654,7 @@ func (q *Query4Audit) RuleCompareWithFunction() Rule {
 
 // RuleCountStar FUN.002
 func (q *Query4Audit) RuleCountStar() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch n := q.Stmt.(type) {
 	case *sqlparser.Select:
 		// count(N), count(col), count(*)
@@ -2673,7 +2668,7 @@ func (q *Query4Audit) RuleCountStar() Rule {
 
 // RuleTruncateTable SEC.001
 func (q *Query4Audit) RuleTruncateTable() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.DDL:
 		if strings.ToLower(s.Action) == "truncate" {
@@ -2685,7 +2680,7 @@ func (q *Query4Audit) RuleTruncateTable() Rule {
 
 // RuleIn ARG.005 && ARG.004 && ARG.014
 func (q *Query4Audit) RuleIn() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.ComparisonExpr:
@@ -2714,7 +2709,7 @@ func (q *Query4Audit) RuleIn() Rule {
 						rule = HeuristicRules["ARG.005"]
 						return false, nil
 					}
-					//default: // debug
+					// default: // debug
 					//	fmt.Println("Type: ", reflect.TypeOf(n.Right).String())
 				}
 			case "not in":
@@ -2739,7 +2734,7 @@ func (q *Query4Audit) RuleIn() Rule {
 
 // RuleIsNullIsNotNull ARG.006
 func (q *Query4Audit) RuleIsNullIsNotNull() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.Select:
 		re := regexp.MustCompile(`(?i)is\s*(not)?\s+null\b`)
@@ -2752,7 +2747,7 @@ func (q *Query4Audit) RuleIsNullIsNotNull() Rule {
 
 // RuleVarcharVSChar COL.008
 func (q *Query4Audit) RuleVarcharVSChar() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -2793,12 +2788,11 @@ func (q *Query4Audit) RuleVarcharVSChar() Rule {
 
 // RuleCreateDualTable TBL.003
 func (q *Query4Audit) RuleCreateDualTable() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.DDL:
 		if s.Table.Name.String() == "dual" {
 			rule = HeuristicRules["TBL.003"]
-
 		}
 	}
 	return rule
@@ -2806,7 +2800,7 @@ func (q *Query4Audit) RuleCreateDualTable() Rule {
 
 // RuleAlterCharset ALT.001
 func (q *Query4Audit) RuleAlterCharset() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -2818,7 +2812,7 @@ func (q *Query4Audit) RuleAlterCharset() Rule {
 						for _, option := range spec.Options {
 							if option.Tp == tidb.TableOptionCharset ||
 								option.Tp == tidb.TableOptionCollate {
-								//增加CONVERT TO的判断
+								// 增加CONVERT TO的判断
 								convertReg, _ := regexp.Compile("convert\\b\\s+to")
 								if convertReg.Match([]byte(strings.ToLower(q.Query))) {
 									break
@@ -2842,7 +2836,7 @@ func (q *Query4Audit) RuleAlterCharset() Rule {
 
 // RuleAlterDropColumn ALT.003
 func (q *Query4Audit) RuleAlterDropColumn() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -2869,7 +2863,7 @@ func (q *Query4Audit) RuleAlterDropColumn() Rule {
 
 // RuleAlterDropKey ALT.004
 func (q *Query4Audit) RuleAlterDropKey() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -2891,7 +2885,7 @@ func (q *Query4Audit) RuleAlterDropKey() Rule {
 
 // RuleBLOBNotNull COL.012
 func (q *Query4Audit) RuleBLOBNotNull() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -2949,7 +2943,7 @@ func (q *Query4Audit) RuleBLOBNotNull() Rule {
 
 // RuleTooManyKeys KEY.005
 func (q *Query4Audit) RuleTooManyKeys() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -2966,7 +2960,7 @@ func (q *Query4Audit) RuleTooManyKeys() Rule {
 
 // RuleTooManyKeyParts KEY.006
 func (q *Query4Audit) RuleTooManyKeyParts() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3008,7 +3002,7 @@ func (q *Query4Audit) RuleTooManyKeyParts() Rule {
 
 // RulePKNotInt KEY.007 && KEY.001
 func (q *Query4Audit) RulePKNotInt() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var pk sqlparser.ColIdent
 	switch s := q.Stmt.(type) {
 	case *sqlparser.DDL:
@@ -3054,7 +3048,7 @@ func (q *Query4Audit) RulePKNotInt() Rule {
 
 // RuleOrderByMultiDirection KEY.008
 func (q *Query4Audit) RuleOrderByMultiDirection() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	err := sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case sqlparser.OrderBy:
@@ -3077,7 +3071,7 @@ func (q *Query4Audit) RuleOrderByMultiDirection() Rule {
 // RuleUniqueKeyDup KEY.009
 // TODO: 目前只是给建议，期望能够实现自动检查
 func (q *Query4Audit) RuleUniqueKeyDup() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3120,7 +3114,7 @@ func (q *Query4Audit) RuleUniqueKeyDup() Rule {
 
 // RuleFulltextIndex KEY.010
 func (q *Query4Audit) RuleFulltextIndex() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	/* // TiDB parser
 	for _, tiStmt := range q.TiStmt {
@@ -3152,7 +3146,7 @@ func (q *Query4Audit) RuleFulltextIndex() Rule {
 
 // RuleTimestampDefault COL.013
 func (q *Query4Audit) RuleTimestampDefault() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3229,7 +3223,7 @@ func (q *Query4Audit) RuleTimestampDefault() Rule {
 
 // RuleAutoIncrementInitNotZero TBL.004
 func (q *Query4Audit) RuleAutoIncrementInitNotZero() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3240,7 +3234,6 @@ func (q *Query4Audit) RuleAutoIncrementInitNotZero() Rule {
 						rule = HeuristicRules["TBL.004"]
 					}
 				}
-
 			}
 		}
 	}
@@ -3249,12 +3242,12 @@ func (q *Query4Audit) RuleAutoIncrementInitNotZero() Rule {
 
 // RuleColumnWithCharset COL.014
 func (q *Query4Audit) RuleColumnWithCharset() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	tks := ast.Tokenize(q.Query)
 	for _, tk := range tks {
 		if tk.Type == ast.TokenTypeWord {
 			switch strings.TrimSpace(strings.ToLower(tk.Val)) {
-			//character移到后面检查
+			// character移到后面检查
 			case "national", "nvarchar", "nchar", "nvarchar(", "nchar(":
 				rule = HeuristicRules["COL.014"]
 				return rule
@@ -3278,7 +3271,7 @@ func (q *Query4Audit) RuleColumnWithCharset() Rule {
 							break
 						}
 					}
-					//在这里检查character
+					// 在这里检查character
 					characterReg, _ := regexp.Compile("character set")
 					if characterReg.Match([]byte(strings.ToLower(q.Query))) {
 						rule = HeuristicRules["COL.014"]
@@ -3318,7 +3311,7 @@ func (q *Query4Audit) RuleColumnWithCharset() Rule {
 
 // RuleTableCharsetCheck TBL.005
 func (q *Query4Audit) RuleTableCharsetCheck() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var allow bool
 	var hasCharset bool
 
@@ -3382,7 +3375,7 @@ func (q *Query4Audit) RuleTableCharsetCheck() Rule {
 
 // RuleForbiddenView TBL.006
 func (q *Query4Audit) RuleForbiddenView() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// 由于vitess对某些语法的支持不完善，使得如创建临时表等语句无法通过语法检查
 	// 所以这里使用正则对触发器、临时表、存储过程等进行匹配
@@ -3408,7 +3401,7 @@ func (q *Query4Audit) RuleForbiddenView() Rule {
 
 // RuleForbiddenTempTable TBL.007
 func (q *Query4Audit) RuleForbiddenTempTable() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	// 由于vitess对某些语法的支持不完善，使得如创建临时表等语句无法通过语法检查
 	// 所以这里使用正则对触发器、临时表、存储过程等进行匹配
@@ -3433,7 +3426,7 @@ func (q *Query4Audit) RuleForbiddenTempTable() Rule {
 
 // RuleTableCollateCheck TBL.008
 func (q *Query4Audit) RuleTableCollateCheck() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var allow bool
 	var hasCollate bool
 
@@ -3497,7 +3490,7 @@ func (q *Query4Audit) RuleTableCollateCheck() Rule {
 
 // RuleBlobDefaultValue COL.015
 func (q *Query4Audit) RuleBlobDefaultValue() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3546,7 +3539,7 @@ func (q *Query4Audit) RuleBlobDefaultValue() Rule {
 
 // RuleIntPrecision COL.016
 func (q *Query4Audit) RuleIntPrecision() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3603,7 +3596,7 @@ func (q *Query4Audit) RuleIntPrecision() Rule {
 
 // RuleVarcharLength COL.017
 func (q *Query4Audit) RuleVarcharLength() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3648,7 +3641,7 @@ func (q *Query4Audit) RuleVarcharLength() Rule {
 
 // RuleColumnNotAllowType COL.018
 func (q *Query4Audit) RuleColumnNotAllowType() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	if len(common.Config.ColumnNotAllowType) == 0 {
 		return rule
@@ -3680,7 +3673,7 @@ func (q *Query4Audit) RuleColumnNotAllowType() Rule {
 
 // RuleTimePrecision COL.019
 func (q *Query4Audit) RuleTimePrecision() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
@@ -3725,7 +3718,7 @@ func (q *Query4Audit) RuleTimePrecision() Rule {
 
 // RuleNoOSCKey KEY.002
 func (q *Query4Audit) RuleNoOSCKey() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch s := q.Stmt.(type) {
 	case *sqlparser.DDL:
 		if strings.ToLower(s.Action) == "create" {
@@ -3743,7 +3736,7 @@ func (q *Query4Audit) RuleNoOSCKey() Rule {
 
 // RuleTooManyFields COL.006
 func (q *Query4Audit) RuleTooManyFields() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3761,7 +3754,7 @@ func (q *Query4Audit) RuleTooManyFields() Rule {
 // RuleMaxTextColsCount COL.007
 func (q *Query4Audit) RuleMaxTextColsCount() Rule {
 	var textColsCount int
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3828,7 +3821,7 @@ func (idxAdv *IndexAdvisor) RuleMaxTextColsCount() Rule {
 
 // RuleAllowEngine TBL.002
 func (q *Query4Audit) RuleAllowEngine() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	var hasDefaultEngine bool
 	var allowedEngine bool
 	switch q.Stmt.(type) {
@@ -3886,7 +3879,7 @@ func (q *Query4Audit) RuleAllowEngine() Rule {
 
 // RulePartitionNotAllowed TBL.001
 func (q *Query4Audit) RulePartitionNotAllowed() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3911,7 +3904,7 @@ func (q *Query4Audit) RulePartitionNotAllowed() Rule {
 
 // RuleAutoIncUnsigned COL.003:
 func (q *Query4Audit) RuleAutoIncUnsigned() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	switch q.Stmt.(type) {
 	case *sqlparser.DDL:
 		for _, tiStmt := range q.TiStmt {
@@ -3966,7 +3959,7 @@ func (q *Query4Audit) RuleAutoIncUnsigned() Rule {
 
 // RuleSpaceAfterDot STA.002
 func (q *Query4Audit) RuleSpaceAfterDot() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	tks := ast.Tokenize(q.Query)
 	for i, tk := range tks {
 		switch tk.Type {
@@ -3989,7 +3982,7 @@ func (q *Query4Audit) RuleSpaceAfterDot() Rule {
 
 // RuleIdxPrefix STA.003
 func (q *Query4Audit) RuleIdxPrefix() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	for _, node := range q.TiStmt {
 		switch n := node.(type) {
 		case *tidb.CreateTableStmt:
@@ -4028,7 +4021,7 @@ func (q *Query4Audit) RuleIdxPrefix() Rule {
 
 // RuleStandardName STA.004
 func (q *Query4Audit) RuleStandardName() Rule {
-	var rule = q.RuleOK()
+	rule := q.RuleOK()
 	allowReg := regexp.MustCompile(`(?i)[a-z0-9_` + "`" + `]`)
 	for _, tk := range ast.Tokenize(q.Query) {
 		if tk.Val == "``" {
@@ -4095,7 +4088,6 @@ func MergeConflictHeuristicRules(rules map[string]Rule) map[string]Rule {
 
 // RuleMySQLError ERR.XXX
 func RuleMySQLError(item string, err error) Rule {
-
 	type MySQLError struct {
 		ErrCode   string
 		ErrString string

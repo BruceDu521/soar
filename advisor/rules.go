@@ -24,8 +24,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/XiaoMi/soar/ast"
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/ast"
+	"github.com/BruceDu521/soar/common"
 
 	"github.com/kr/pretty"
 	"github.com/percona/go-mysql/query"
@@ -1212,7 +1212,6 @@ func InitHeuristicRules() {
 // IsIgnoreRule 判断是否是过滤规则
 // 支持XXX*前缀匹配，OK规则不可设置过滤
 func IsIgnoreRule(item string) bool {
-
 	for _, ir := range common.Config.IgnoreRules {
 		ir = strings.Trim(ir, "*")
 		if strings.HasPrefix(item, ir) && ir != "OK" && ir != "" {
@@ -1251,7 +1250,7 @@ func FormatSuggest(sql string, currentDB string, format string, suggests ...map[
 	common.Log.Debug("FormatSuggest, Query: %s", sql)
 	var fingerprint, id string
 	var buf []string
-	var score = 100
+	score := 100
 	type Result struct {
 		ID          string
 		Fingerprint string

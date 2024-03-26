@@ -23,7 +23,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 
 	"github.com/kr/pretty"
 	"vitess.io/vitess/go/vt/sqlparser"
@@ -413,7 +413,6 @@ func TestAppendTable(t *testing.T) {
 			}
 			return true, nil
 		}, stmt)
-
 		if err != nil {
 			t.Error(err)
 		}

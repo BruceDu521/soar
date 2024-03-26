@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 	"vitess.io/vitess/go/vt/sqlparser"
 )
 
@@ -322,7 +322,6 @@ func FindEQColsInWhere(node sqlparser.SQLNode) []*common.Column {
 			}
 		}
 		return true, nil
-
 	}, node)
 	common.LogIfWarn(err, "")
 	return columns
@@ -367,7 +366,6 @@ func FindINEQColsInWhere(node sqlparser.SQLNode) []*common.Column {
 		}
 
 		return true, nil
-
 	}, node)
 	common.LogIfWarn(err, "")
 	return columns
@@ -583,7 +581,6 @@ func FindJoinCols(node sqlparser.SQLNode) [][]*common.Column {
 				columns = append(columns, cols)
 
 			}
-
 		}
 		return true, nil
 	}, node)
@@ -654,7 +651,6 @@ func FindSubquery(depth int, node sqlparser.SQLNode, queries ...string) []string
 				// 去除SQL前后的括号
 				queries = append(queries, sql[1:len(sql)-1])
 			}
-
 		}
 		return true, nil
 	}, node)

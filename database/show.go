@@ -22,7 +22,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 )
 
 // SHOW TABLE STATUS Syntax

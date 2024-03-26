@@ -19,12 +19,12 @@ package advisor
 import (
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 )
 
 func TestDigestExplainText(t *testing.T) {
 	common.Log.Debug("Entering function: %s", common.GetFunctionName())
-	var text = `+----+-------------+---------+-------+---------------------------------------------------------+-------------------+---------+---------------------------+------+-------------+
+	text := `+----+-------------+---------+-------+---------------------------------------------------------+-------------------+---------+---------------------------+------+-------------+
 | id | select_type | table   | type  | possible_keys                                           | key               | key_len | ref                       | rows | Extra       |
 +----+-------------+---------+-------+---------------------------------------------------------+-------------------+---------+---------------------------+------+-------------+
 |  1 | SIMPLE      | country | index | PRIMARY,country_id                                      | country           | 152     | NULL                      |  109 | Using index |

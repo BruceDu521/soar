@@ -27,7 +27,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 
 	// for database/sql
 	_ "github.com/go-sql-driver/mysql"

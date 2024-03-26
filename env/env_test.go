@@ -24,16 +24,18 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
-	"github.com/XiaoMi/soar/database"
+	"github.com/BruceDu521/soar/common"
+	"github.com/BruceDu521/soar/database"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/kr/pretty"
 )
 
-var update = flag.Bool("update", false, "update .golden files")
-var vEnv *VirtualEnv
-var rEnv *database.Connector
+var (
+	update = flag.Bool("update", false, "update .golden files")
+	vEnv   *VirtualEnv
+	rEnv   *database.Connector
+)
 
 func TestMain(m *testing.M) {
 	// 初始化 init

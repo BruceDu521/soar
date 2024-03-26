@@ -21,10 +21,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/XiaoMi/soar/ast"
-	"github.com/XiaoMi/soar/common"
-	"github.com/XiaoMi/soar/database"
-	"github.com/XiaoMi/soar/env"
+	"github.com/BruceDu521/soar/ast"
+	"github.com/BruceDu521/soar/common"
+	"github.com/BruceDu521/soar/database"
+	"github.com/BruceDu521/soar/env"
 
 	"github.com/dchest/uniuri"
 	"vitess.io/vitess/go/vt/sqlparser"
@@ -715,7 +715,6 @@ func (idxAdv *IndexAdvisor) buildIndexWithNoEnv(indexList map[string]map[string]
 					ColumnDetails: []*common.Column{col},
 				})
 			}
-
 		}
 	}
 	return indexes
@@ -893,7 +892,6 @@ func CompleteColumnsInfo(stmt sqlparser.Statement, cols []*common.Column, env *e
 				}
 			}
 		}
-
 	}
 
 	// 如果不依赖env环境，将可能存在的列也加入到索引预处理列表中
@@ -1092,7 +1090,6 @@ func DuplicateKeyChecker(conn *database.Connector, databases ...string) map[stri
 		// 获取所有的表
 		tmpOnline.Database = db
 		tables, err := tmpOnline.ShowTables()
-
 		if err != nil {
 			funcErrCheck(err)
 			if !common.Config.DryRun {

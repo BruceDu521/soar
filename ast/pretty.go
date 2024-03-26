@@ -21,7 +21,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 
 	"github.com/percona/go-mysql/query"
 )
@@ -267,7 +267,7 @@ func format(query string) string {
 
 			}
 
-			//if SQL 'LIMIT' clause, start variable to reset newline
+			// if SQL 'LIMIT' clause, start variable to reset newline
 			if token.Val == "LIMIT" && inlineParentheses {
 				clauseLimit = true
 			}
@@ -278,7 +278,6 @@ func format(query string) string {
 			// Checks if we are out of the limit clause
 
 			clauseLimit = false
-
 		} else if token.Val == "," && !inlineParentheses {
 			// Commas start a new line (unless within inline parentheses or SQL 'LIMIT' clause)
 			if clauseLimit {
@@ -288,7 +287,6 @@ func format(query string) string {
 				// All other cases of commas
 				newline = true
 			}
-
 		} else if token.Type == TokenTypeReservedNewline {
 			// Newline reserved words start a new line
 			// Add a newline before the reserved word (if not already added)

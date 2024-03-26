@@ -19,7 +19,7 @@ package ast
 import (
 	"errors"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 	"vitess.io/vitess/go/vt/sqlparser"
 )
 

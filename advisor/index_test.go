@@ -25,17 +25,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
-	"github.com/XiaoMi/soar/database"
-	"github.com/XiaoMi/soar/env"
+	"github.com/BruceDu521/soar/common"
+	"github.com/BruceDu521/soar/database"
+	"github.com/BruceDu521/soar/env"
 
 	"github.com/kr/pretty"
 	"vitess.io/vitess/go/vt/sqlparser"
 )
 
-var update = flag.Bool("update", false, "update .golden files")
-var vEnv *env.VirtualEnv
-var rEnv *database.Connector
+var (
+	update = flag.Bool("update", false, "update .golden files")
+	vEnv   *env.VirtualEnv
+	rEnv   *database.Connector
+)
 
 func TestMain(m *testing.M) {
 	// 初始化 init
@@ -97,7 +99,7 @@ func TestRuleImplicitConversion(t *testing.T) {
 		{
 			"SELECT * FROM t1 WHERE id = '1'", // string -> int can use index
 			"SELECT * FROM t1 WHERE id = 1",
-			"SELECT * FROM t4 WHERE col = 1", // https://github.com/XiaoMi/soar/issues/151
+			"SELECT * FROM t4 WHERE col = 1", // https://github.com/BruceDu521/soar/issues/151
 			"SELECT * FROM sakila.film WHERE rental_rate > 1",
 		},
 	}

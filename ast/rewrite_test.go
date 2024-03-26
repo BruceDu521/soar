@@ -21,7 +21,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/XiaoMi/soar/common"
+	"github.com/BruceDu521/soar/common"
 )
 
 func TestRewrite(t *testing.T) {
@@ -636,7 +636,6 @@ func TestRewriteDistinctStar(t *testing.T) {
 			"output": "SELECT DISTINCT film.* FROM film, tbl;",
 		},
 		{
-
 			"input":  "SELECT DISTINCT * FROM film, tbl;",
 			"output": "SELECT DISTINCT * FROM film, tbl;",
 		},
@@ -656,7 +655,7 @@ func TestMergeAlterTables(t *testing.T) {
 		// ADD|DROP INDEX
 		// TODO: PRIMARY KEY, [UNIQUE|FULLTEXT|SPATIAL] INDEX
 		"CREATE INDEX part_of_name ON customer (name(10));",
-		"create index idx_test_cca on test_bb(test_cc);", // https://github.com/XiaoMi/soar/issues/205
+		"create index idx_test_cca on test_bb(test_cc);", // https://github.com/BruceDu521/soar/issues/205
 		"alter table `sakila`.`t1` add index `idx_col`(`col`)",
 		"alter table `sakila`.`t1` add UNIQUE index `idx_col`(`col`)",
 		"alter table `sakila`.`t1` add index `idx_ID`(`ID`)",
@@ -722,6 +721,7 @@ func TestRewriteUnionAll(t *testing.T) {
 	}
 	common.Log.Debug("Exiting function: %s", common.GetFunctionName())
 }
+
 func TestRewriteTruncate(t *testing.T) {
 	common.Log.Debug("Entering function: %s", common.GetFunctionName())
 	testSQL := []map[string]string{
